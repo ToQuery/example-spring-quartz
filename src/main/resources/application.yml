@@ -1,0 +1,54 @@
+
+spring:
+  application:
+    name: example-quartz
+  jpa:
+    open-in-view: false
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+        use_sql_comments: true
+  #连接池配置
+  datasource:
+    platform: org.hibernate.dialect.MySQL5Dialect
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/example_quartz?useSSL=false&useUnicode=true
+    username: root
+    password: 123456
+
+  quartz:
+    auto-startup: true
+    job-store-type: jdbc
+    jdbc:
+      initialize-schema: ALWAYS
+    scheduler-name: example-quartz
+#    properties:
+#      org.quartz.scheduler.instanceName: quartz-demo-app
+#      org.quartz.scheduler.instanceId: AUTO
+#      # org.quartz.scheduler.instanceIdGenerator.class: com.helixz.quartz.demo.component.CustomQuartzInstanceIdGenerator
+#      # 并发数
+#      org.quartz.threadPool.threadCount: 20
+#      org.quartz.jobStore.class: org.quartz.impl.jdbcjobstore.JobStoreTX
+#      org.quartz.jobStore.driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate
+#      org.quartz.jobStore.useProperties: true
+#      org.quartz.jobStore.misfireThreshold: 60000
+#      org.quartz.jobStore.tablePrefix: qrtz_
+#      org.quartz.jobStore.isClustered: true
+#      org.quartz.plugin.shutdownHook.class: org.quartz.plugins.management.ShutdownHookPlugin
+#      org.quartz.plugin.shutdownHook.cleanShutdown: TRUE
+
+
+#============================================================================# 配置JobStore#============================================================================# JobDataMaps是否都为String类型，默认falseorg.quartz.jobStore.useProperties=false
+# 表的前缀，默认QRTZ_org.quartz.jobStore.tablePrefix = QRTZ_
+# 是否加入集群org.quartz.jobStore.isClustered = true
+# 调度实例失效的检查时间间隔 msorg.quartz.jobStore.clusterCheckinInterval = 5000
+# 当设置为"true"时，此属性告诉Quartz 在非托管JDBC连接上调用setTransactionIsolation（Connection.TRANSACTION_READ_COMMITTED）。org.quartz.jobStore.txIsolationLevelReadCommitted = true
+# 数据保存方式为数据库持久化org.quartz.jobStore.class = org.quartz.impl.jdbcjobstore.JobStoreTX
+# 数据库代理类，一般org.quartz.impl.jdbcjobstore.StdJDBCDelegate可以满足大部分数据库org.quartz.jobStore.driverDelegateClass = org.quartz.impl.jdbcjobstore.StdJDBCDelegate
+#============================================================================# Scheduler 调度器属性配置#============================================================================# 调度标识名 集群中每一个实例都必须使用相同的名称org.quartz.scheduler.instanceName = ClusterQuartz# ID设置为自动获取 每一个必须不同org.quartz.scheduler.instanceId= AUTO
+#============================================================================# 配置ThreadPool#============================================================================# 线程池的实现类（一般使用SimpleThreadPool即可满足几乎所有用户的需求）org.quartz.threadPool.class=org.quartz.simpl.SimpleThreadPool
+# 指定线程数，一般设置为1-100直接的整数，根据系统资源配置org.quartz.threadPool.threadCount = 5
+# 设置线程的优先级(可以是Thread.MIN_PRIORITY（即1）和Thread.MAX_PRIORITY（这是10）之间的任何int 。默认值为Thread.NORM_PRIORITY（5）。)org.quartz.threadPool.threadPriority = 5
