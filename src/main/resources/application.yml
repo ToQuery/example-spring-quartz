@@ -1,3 +1,5 @@
+server:
+  port: 0
 
 spring:
   application:
@@ -25,9 +27,10 @@ spring:
     jdbc:
       initialize-schema: ALWAYS
     scheduler-name: example-quartz
-#    properties:
-#      org.quartz.scheduler.instanceName: quartz-demo-app
-#      org.quartz.scheduler.instanceId: AUTO
+    properties:
+      org.quartz.jobStore.isClustered: true
+      #      org.quartz.scheduler.instanceName: quartz-demo-app
+      org.quartz.scheduler.instanceId: AUTO
 #      # org.quartz.scheduler.instanceIdGenerator.class: com.helixz.quartz.demo.component.CustomQuartzInstanceIdGenerator
 #      # 并发数
 #      org.quartz.threadPool.threadCount: 20
@@ -52,3 +55,4 @@ spring:
 #============================================================================# 配置ThreadPool#============================================================================# 线程池的实现类（一般使用SimpleThreadPool即可满足几乎所有用户的需求）org.quartz.threadPool.class=org.quartz.simpl.SimpleThreadPool
 # 指定线程数，一般设置为1-100直接的整数，根据系统资源配置org.quartz.threadPool.threadCount = 5
 # 设置线程的优先级(可以是Thread.MIN_PRIORITY（即1）和Thread.MAX_PRIORITY（这是10）之间的任何int 。默认值为Thread.NORM_PRIORITY（5）。)org.quartz.threadPool.threadPriority = 5
+
