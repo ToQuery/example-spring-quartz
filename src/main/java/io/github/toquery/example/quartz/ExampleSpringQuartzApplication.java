@@ -6,14 +6,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
-import javax.sql.DataSource;
-
 // @EnableScheduling
 @SpringBootApplication
-public class ExampleQuartzApplication {
+public class ExampleSpringQuartzApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(ExampleQuartzApplication.class, args);
+        SpringApplication.run(ExampleSpringQuartzApplication.class, args);
     }
 
 }
