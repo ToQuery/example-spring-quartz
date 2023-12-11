@@ -1,4 +1,4 @@
-package io.github.toquery.example.quartz;
+package io.github.toquery.example.quartz.job;
 
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.DisallowConcurrentExecution;

@@ -1,9 +1,8 @@
-server:
-  port: 0
 
 spring:
   application:
     name: example-spring-quartz
+
   jpa:
     open-in-view: false
     show-sql: true
@@ -13,34 +12,49 @@ spring:
       hibernate:
         format_sql: true
         use_sql_comments: true
+
   #连接池配置
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://${DB_MYSQL_HOST}:3306/example_spring_quartz?useUnicode=true&characterEncoding=utf8&allowMultiQueries=true&serverTimezone=Asia/Shanghai&zeroDateTimeBehavior=convertToNull
-    username: ${DB_MYSQL_USER}
-    password: ${DB_MYSQL_PASSWORD}
+    url: jdbc:postgresql://postgres.example-spring-quartz.orb.local:5432/example_spring_quartz
+    username: postgres
+    password: postgres
 
   quartz:
     auto-startup: true
     job-store-type: jdbc
+
+    scheduler-name: example-spring-quartz
+    # 程序结束时会等待quartz相关的内容结束
+    wait-for-jobs-to-complete-on-shutdown: true
+    # QuartzScheduler启动时更新己存在的Job,这样就不用每次修改targetObject后删除qrtz_job_details表对应记录
+    overwrite-existing-jobs: true
     jdbc:
       initialize-schema: ALWAYS
-    scheduler-name: example-spring-quartz
     properties:
-      org.quartz.jobStore.isClustered: true
-      #      org.quartz.scheduler.instanceName: quartz-demo-app
-      org.quartz.scheduler.instanceId: AUTO
-#      # org.quartz.scheduler.instanceIdGenerator.class: com.helixz.quartz.demo.component.CustomQuartzInstanceIdGenerator
-#      # 并发数
-#      org.quartz.threadPool.threadCount: 20
-#      org.quartz.jobStore.class: org.quartz.impl.jdbcjobstore.JobStoreTX
-#      org.quartz.jobStore.driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate
-#      org.quartz.jobStore.useProperties: true
-#      org.quartz.jobStore.misfireThreshold: 60000
-#      org.quartz.jobStore.tablePrefix: qrtz_
-#      org.quartz.jobStore.isClustered: true
-#      org.quartz.plugin.shutdownHook.class: org.quartz.plugins.management.ShutdownHookPlugin
-#      org.quartz.plugin.shutdownHook.cleanShutdown: TRUE
+      org:
+        quartz:
+          scheduler:
+            # instanceName: quartz-demo-app
+            instanceId: AUTO #默认主机名和时间戳生成实例ID,可以是任何字符串，但对于所有调度程序来说，必须是唯一的 对应 QRTZ_SCHEDULER_STATE INSTANCE_NAME字段
+          jobStore:
+            class: org.springframework.scheduling.quartz.LocalDataSourceJobStore #持久化配置
+            driverDelegateClass: org.quartz.impl.jdbcjobstore.PostgreSQLDelegate # 由于StdJDBCDelegate在读取BLOB时存在问题，需要使用与数据库相对应的驱动。
+            #driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate #我们仅为数据库制作了特定于数据库的代理
+            tablePrefix: QRTZ_ #数据库表前缀
+            misfireThreshold: 60000 #在被认为“失火”之前，调度程序将“容忍”一个Triggers将其下一个启动时间通过的毫秒数。默认值（如果您在配置中未输入此属性）为60000（60秒）。
+            clusterCheckinInterval: 5000 #设置此实例“检入”*与群集的其他实例的频率（以毫秒为单位）。影响检测失败实例的速度。
+            isClustered: true #打开群集功能
+            acquireTriggersWithinLock: true
+            useProperties: false
+          threadPool:
+            class: org.springframework.scheduling.quartz.SimpleThreadPoolTaskExecutor # org.quartz.impl.jdbcjobstore.JobStoreTX
+            threadCount: 10 # 并发数
+            threadPriority: 5
+            threadsInheritContextClassLoaderOfInitializingThread: true
+          plugin:
+            shutdownHook:
+              class: org.quartz.plugins.management.ShutdownHookPlugin
+              cleanShutdown: true
 
 
 #============================================================================# 配置JobStore#============================================================================# JobDataMaps是否都为String类型，默认falseorg.quartz.jobStore.useProperties=false

@@ -1,7 +1,7 @@
 package io.github.toquery.example.quartz;
 
+import io.github.toquery.example.quartz.job.JobSpringQuartz;
 import org.quartz.JobDetail;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.quartz.CronTriggerFactoryBean;
